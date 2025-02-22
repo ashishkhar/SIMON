@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Simon</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <style>
+    /* Add styles for the IQ progress bar */
+    #iq-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    #iq-bar {
+      height: 20px;
+      width: 0;
+      background-color: #76c7c0;
+      border-radius: 5px;
+      transition: width 0.5s;
+    }
+    /* Background animation styles */
+    body {
+      overflow: hidden; /* Prevent scrollbars */
+      position: relative;
+    }
+    #background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Send to back */
+      pointer-events: none; /* Allow clicks to pass through */
+    }
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.7;
+      pointer-events: none; /* Prevent interaction */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="background"></div> <!-- Background animation container -->
+  <h1 id="level-title">Press the Start Button to Begin</h1>
+  <button id="start-button">Start</button>
+  <h2 id="score-title">Score: 0</h2>
+  <h2 id="iq-indicator" style="display: none;">IQ Level: 0</h2>
+  <div class="container">
+    <div class="row">
+      <div type="button" id="green" class="btn green"></div>
+      <div type="button" id="red" class="btn red"></div>
+    </div>
+    <div class="row">
+      <div type="button" id="yellow" class="btn yellow"></div>
+      <div type="button" id="blue" class="btn blue"></div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="index.js"></script>
+  <script>
+    // Background animation logic
+    function createDot() {
+      const dot = $('<div class="dot"></div>');
+      const size = Math.random() * 20 + 5; // Random size between 5 and 25
+      const left = Math.random() * 100; // Random position
+      const top = Math.random() * 100; // Random position
+      const color = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random color
+
+      dot.css({
+        width: size + 'px',
+        height: size + 'px',
+        left: left + '%',
+        top: top + '%',
+        backgroundColor: color,
+      });
+
+      $('#background').append(dot);
+
+      // Animate the dot
+      dot.animate({
+        top: '+=100px', // Move down
+        opacity: 0 // Fade out
+      }, 5000, function() {
+        $(this).remove(); // Remove after animation
+      });
+    }
+
+    // Create dots at intervals
+    setInterval(createDot, 1000); // Create a dot every second
+  </script>
+</body>
+
+</html>
