@@ -7,6 +7,10 @@
   <title>Simon</title>
   <link rel="stylesheet" href="./styles.css">
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  
+  <!-- Include js-cookie library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+
   <style>
     /* Add styles for the IQ progress bar */
     #iq-container {
@@ -110,6 +114,7 @@
   <button id="start-button">Start</button>
   <h2 id="score-title">Score: 0</h2>
   <h2 id="iq-indicator" style="display: none;">IQ Level: 0</h2>
+  <button id="reset-highscore" class="reset-button">Reset High Score</button>
   <div class="container">
     <div class="row">
       <div type="button" id="green" class="btn green"></div>

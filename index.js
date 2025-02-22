@@ -9,6 +9,7 @@ let maxScore = 100; // Set a maximum score to create a sense of limitation
 let streak = 0; // Track consecutive correct sequences
 let multiplier = 1; // Score multiplier for streaks
 let sequenceStartTime; // Track the start time of the sequence
+let highScore = Cookies.get('simonHighScore') || 0; // Get stored high score from cookies or default to 0
 
 // Add encouraging messages for different achievements
 const achievements = {
@@ -194,43 +195,39 @@ function animatePress(currentColor) {
 function checkAnswer(currentLevel) {
     if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
         if (userClickedPattern.length === gamePattern.length) {
-            // Increase streak and adjust multiplier
             streak++;
             multiplier = Math.min(4, 1 + Math.floor(streak / 3));
             
-            // Calculate score with multiplier
             let points = 10 * multiplier;
             score += points;
+            
+            // Update high score
+            updateHighScore();
             
             // Show achievement message
             showAchievement(points);
             
-            // Update display
-            $("#score-title").text(`Score: ${score} (${multiplier}x Multiplier!)`);
-            
-            // Check if it's level 4 and the sequence was completed quickly
-            const timeTaken = Date.now() - sequenceStartTime; // Time in milliseconds
-            if (level === 4 && timeTaken < 5500) { // If completed in less than 5.5 seconds
-                speed = Math.max(200, speed - 200); // Increase speed more dramatically
+            // Check if it's level 4 and sequence was completed quickly
+            const timeTaken = Date.now() - sequenceStartTime;
+            if (level === 4 && timeTaken < 5500) {
+                speed = Math.max(200, speed - 200);
                 showTemporaryMessage("You look like a pro already! Let me fix that for you. 😈");
                 
-                // Wait for the message to fade before starting the next sequence
                 setTimeout(function() {
                     nextSequence();
-                }, 2500); // Wait for the message duration
+                }, 2500);
             } else {
                 setTimeout(function() {
                     nextSequence();
-                }, 1000); // Normal wait time for other levels
+                }, 1000);
             }
         }
     } else {
         playSound("wrong");
-        const penaltyAmount = Math.max(20, Math.floor(score * 0.4)); // 40% penalty or minimum 20 points
-        score = Math.max(0, score - penaltyAmount); // Apply penalty but don't go below 0
-        $("#score-title").text("Score: " + score);
+        const penaltyAmount = Math.max(20, Math.floor(score * 0.4));
+        score = Math.max(0, score - penaltyAmount);
+        $("#score-title").text(`Score: ${score} | High Score: ${highScore}`);
         
-        // Show continue prompt only if score is greater than 0
         if (score > 0) {
             showContinuePrompt();
         } else {
@@ -281,7 +278,7 @@ function continueGame() {
 
 // Game over
 function gameOver() {
-    $("#level-title").html(`Game Over! Final Score: ${score}<br>Press Start to Play Again`);
+    $("#level-title").html(`Game Over! Final Score: ${score}<br>High Score: ${highScore}<br>Press Start to Play Again`);
     $("body").addClass("game-over");
     setTimeout(function() {
         $("body").removeClass("game-over");
@@ -349,12 +346,12 @@ $("<style>")
 function startOver() {
     level = 0;
     gamePattern = [];
-    userClickedPattern = []; // Reset user clicked pattern
+    userClickedPattern = [];
     started = false;
     score = 0;
-    speed = 1000; // Reset speed
-    $("#score-title").text("Score: 0");
-    $("#level-title").text("Press Start to Begin"); // Reset title
+    speed = 1000;
+    $("#score-title").text(`Score: 0 | High Score: ${highScore}`);
+    $("#level-title").text("Press Start to Begin");
 }
 
 // Add this new function to show temporary messages
@@ -368,3 +365,35 @@ function showTemporaryMessage(message, duration = 2500) {
         messageElement.remove();
     }, duration);
 }
+
+// Add this function to update high score
+function updateHighScore() {
+    if (score > highScore) {
+        highScore = score;
+        Cookies.set('simonHighScore', highScore); // Store high score in cookies
+        showTemporaryMessage("New High Score! 🏆");
+    }
+    // Update the display to show both current and high score
+    $("#score-title").text(`Score: ${score} | High Score: ${highScore}`);
+}
+
+// Add this to show the high score when the game loads
+$(document).ready(function() {
+    $("#score-title").text(`Score: 0 | High Score: ${highScore}`);
+});
+
+// Add this function to reset high score
+function resetHighScore() {
+    highScore = 0;
+    Cookies.remove('simonHighScore'); // Remove high score from cookies
+    $("#score-title").text(`Score: ${score} | High Score: ${highScore}`);
+    showTemporaryMessage("High Score Reset!");
+}
+
+// Add a reset button to your HTML
+// <button id="reset-highscore" style="margin-top: 10px;">Reset High Score</button>
+
+// Add click handler
+$("#reset-highscore").click(function() {
+    resetHighScore();
+});
