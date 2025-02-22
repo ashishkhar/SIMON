@@ -9,7 +9,7 @@ let maxScore = 100; // Set a maximum score to create a sense of limitation
 let streak = 0; // Track consecutive correct sequences
 let multiplier = 1; // Score multiplier for streaks
 let sequenceStartTime; // Track the start time of the sequence
-let highScore = Cookies.get('simonHighScore') || 0; // Get stored high score from cookies or default to 0
+let highScore = localStorage.getItem('simonHighScore') || 0; // Get stored high score from localStorage or default to 0
 
 // Add encouraging messages for different achievements
 const achievements = {
@@ -370,7 +370,7 @@ function showTemporaryMessage(message, duration = 2500) {
 function updateHighScore() {
     if (score > highScore) {
         highScore = score;
-        Cookies.set('simonHighScore', highScore); // Store high score in cookies
+        localStorage.setItem('simonHighScore', highScore); // Store high score in localStorage
         showTemporaryMessage("New High Score! 🏆");
     }
     // Update the display to show both current and high score
@@ -385,7 +385,7 @@ $(document).ready(function() {
 // Add this function to reset high score
 function resetHighScore() {
     highScore = 0;
-    Cookies.remove('simonHighScore'); // Remove high score from cookies
+    localStorage.removeItem('simonHighScore'); // Remove high score from localStorage
     $("#score-title").text(`Score: ${score} | High Score: ${highScore}`);
     showTemporaryMessage("High Score Reset!");
 }
