@@ -5,7 +5,6 @@ let level = 0;
 let started = false;
 let score = 0; // Track score
 let speed = 1000; // Initial speed for sequence display
-let maxScore = 100; // Set a maximum score to create a sense of limitation
 let streak = 0; // Track consecutive correct sequences
 let multiplier = 1; // Score multiplier for streaks
 let sequenceStartTime; // Track the start time of the sequence
@@ -208,24 +207,25 @@ function checkAnswer(currentLevel) {
             showAchievement(points);
             
             // Check if it's level 4 and sequence was completed quickly
-            const timeTaken = Date.now() - sequenceStartTime;
-            if (level === 4 && timeTaken < 5500) {
-                speed = Math.max(200, speed - 200);
+            const timeTaken = Date.now() - sequenceStartTime; // Time in milliseconds
+            if (level === 4 && timeTaken < 5500) { // If completed in less than 5.5 seconds
+                speed = Math.max(200, speed - 200); // Increase speed more dramatically
                 showTemporaryMessage("You look like a pro already! Let me fix that for you. 😈");
                 
+                // Wait for the message to fade before starting the next sequence
                 setTimeout(function() {
                     nextSequence();
-                }, 2500);
+                }, 2500); // Wait for the message duration
             } else {
                 setTimeout(function() {
                     nextSequence();
-                }, 1000);
+                }, 1000); // Normal wait time for other levels
             }
         }
     } else {
         playSound("wrong");
-        const penaltyAmount = Math.max(20, Math.floor(score * 0.4));
-        score = Math.max(0, score - penaltyAmount);
+        const penaltyAmount = Math.max(20, Math.floor(score * 0.4)); // 40% penalty or minimum 20 points
+        score = Math.max(0, score - penaltyAmount); // Apply penalty but don't go below 0
         $("#score-title").text(`Score: ${score} | High Score: ${highScore}`);
         
         if (score > 0) {
@@ -349,7 +349,7 @@ function startOver() {
     userClickedPattern = [];
     started = false;
     score = 0;
-    speed = 1000;
+    speed = 1000; // Reset speed
     $("#score-title").text(`Score: 0 | High Score: ${highScore}`);
     $("#level-title").text("Press Start to Begin");
 }
@@ -390,10 +390,7 @@ function resetHighScore() {
     showTemporaryMessage("High Score Reset!");
 }
 
-// Add a reset button to your HTML
-// <button id="reset-highscore" style="margin-top: 10px;">Reset High Score</button>
-
-// Add click handler
+// Add click handler for reset button
 $("#reset-highscore").click(function() {
     resetHighScore();
 });
