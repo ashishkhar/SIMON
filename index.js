@@ -208,7 +208,7 @@ function checkAnswer(currentLevel) {
             
             // Check if it's level 4 and sequence was completed quickly
             const timeTaken = Date.now() - sequenceStartTime; // Time in milliseconds
-            if (level === 4 && timeTaken < 3500) { // If completed in less than 5.5 seconds
+            if (level === 4 && timeTaken < 4500) { // If completed in less than 5.5 seconds
                 speed = Math.max(200, speed - 200); // Increase speed more dramatically
                 showTemporaryMessage("You look like a pro already! Let me fix that for you. 😈");
                 
