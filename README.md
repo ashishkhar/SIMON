@@ -1,7 +1,8 @@
 # Simon Game - Memory Challenge
 
-![Simon Game Screenshot](screenshots/simon-game.png)
-
+<p align="center">
+  <img src="screenshots/simon-game.png" alt="Simon Game Screenshot" width="300"/>
+</p>
 ## 🎮 [Play the Game](https://ashishkhar.github.io/SIMON/)
 
 A modern take on the classic Simon electronic memory game, built with JavaScript and jQuery. Test and improve your memory skills while having fun!
