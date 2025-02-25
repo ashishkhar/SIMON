@@ -394,3 +394,5 @@ function resetHighScore() {
 $("#reset-highscore").click(function() {
     resetHighScore();
 });
+
+
